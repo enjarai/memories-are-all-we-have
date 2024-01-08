@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "memories-are-all-we-have",
+	"version": "${version}",
+	"name": "Memories Are All We Have",
+	"description": "A simple mod that centralizes your screenshot storage.",
+	"authors": [
+		"enjarai"
+	],
+	"contact": {
+		"homepage": "https://enjarai.dev/",
+		"sources": "https://github.com/enjarai/memories-are-all-we-have",
+		"issues": "https://github.com/enjarai/memories-are-all-we-have/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/memories-are-all-we-have/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			"dev.enjarai.memories.MemoriesAreAllWeHave"
+		]
+	},
+	"mixins": [
+		"memories-are-all-we-have.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15",
+		"minecraft": ">=1.17-",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}

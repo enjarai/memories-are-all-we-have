@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "dev.enjarai.memories.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  },
+  "client": [
+    "ClientAdvancementManagerMixin",
+    "ScreenshotRecorderMixin"
+  ]
+}
