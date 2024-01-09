@@ -9,8 +9,8 @@
 	],
 	"contact": {
 		"homepage": "https://enjarai.dev/",
-		"sources": "https://github.com/enjarai/memories-are-all-we-have",
-		"issues": "https://github.com/enjarai/memories-are-all-we-have/issues"
+		"sources": "https://github.com/${github_repo}",
+		"issues": "https://github.com/${github_repo}/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/memories-are-all-we-have/icon.png",
@@ -25,7 +25,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.15",
-		"minecraft": ">=1.17-",
+		"minecraft": "${mc_target}",
 		"java": ">=17",
 		"fabric-api": "*"
 	}

@@ -1,13 +1,14 @@
 plugins {
-	id 'fabric-loom' version '1.4-SNAPSHOT'
+	id 'fabric-loom' version '1.5-SNAPSHOT'
 	id 'maven-publish'
+	id "me.modmuss50.mod-publish-plugin" version "0.4.4"
 }
 
-version = project.mod_version
-group = project.maven_group
+version = "${property("mod.version")}+${stonecutter.current.version}"
+group = property("mod.maven_group")
 
 base {
-	archivesName = project.archives_base_name
+	archivesName = property("mod.archives_base_name")
 }
 
 repositories {
@@ -26,21 +27,26 @@ repositories {
 
 dependencies {
 	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	minecraft "com.mojang:minecraft:${stonecutter.current.version}"
+	mappings "net.fabricmc:yarn:${property('deps.yarn')}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${property('deps.loader')}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${property('deps.fabric_api')}"
 
-	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modImplementation "com.terraformersmc:modmenu:${property('deps.modmenu')}"
 }
 
 processResources {
-	inputs.property "version", project.version
+	var replaceProperties = [
+			version: project.version,
+			mc_target: findProperty("mod.mc_target"),
+			github_repo: findProperty("publish.github_repo")
+	]
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+	inputs.properties replaceProperties
+	filesMatching(['fabric.mod.json']) {
+		expand replaceProperties
 	}
 }
 
@@ -78,5 +84,50 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
+	}
+}
+
+if (stonecutter.current.isActive()) { // run configs for non-active version would be invalid
+	loom {
+		runConfigs.all {
+			ideConfigGenerated = true // generate IDE tasks for running client, server and testmod, datagen if those are present
+			runDir "../../run" // use a global run directory for all versions
+		}
+	}
+}
+
+publishMods {
+	file = remapJar.archiveFile
+	displayName = "${property('mod.version')} for ${stonecutter.current.version}"
+	version = project.version
+	changelog = getRootProject().file("CHANGELOG.md").text
+	type = STABLE
+	modLoaders.add("fabric")
+
+	def min = property('publish.target_min')
+	def max = property('publish.target_max')
+
+	modrinth {
+		projectId = property('publish.modrinth_id')
+		accessToken = providers.gradleProperty('enjaraiModrinthToken').get()
+
+		if (min == max) {
+			minecraftVersions.add(min)
+		} else {
+			minecraftVersionRange {
+				start = min
+				end = max
+			}
+		}
+
+		requires { slug = "fabric-api" }
+	}
+
+	github {
+		repository = property('publish.github_repo')
+		accessToken = providers.gradleProperty('enjaraiGithubToken').get()
+
+		commitish = "master"
+		tagName = project.version
 	}
 }
