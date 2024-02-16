@@ -3,7 +3,7 @@ Modding my game can often get in the way of this periodic dose of nostalgia,
 with my memories being spread out over many instances and launchers, still there, but hard to reconcile.
 
 This mod attempts to alleviate this problem to some degree by changing your 
-screenshots directory to a global folder located at `%HOME%/Documents/Minecraft/Screenshots/`,
+screenshots directory to a global folder located at `%HOME%/Pictures/Minecraft/Screenshots/`,
 also adding a config file there for some optional extras that may help in their own way.
 
 To help achieve its goal, the mod is intentionally as simple and "set and forget" as possible, 
